@@ -3,11 +3,19 @@ SEPOLICY_PATH:= device/qcom/sepolicy_vndr-aospa
 QSSI_SEPOLICY_PATH:= device/qcom/sepolicy
 BOARD_SYSTEM_EXT_SEPOLICY_PREBUILT_DIRS := device/qcom/sepolicy/generic
 BOARD_PRODUCT_SEPOLICY_PREBUILT_DIRS := device/qcom/sepolicy/generic/product
-SYS_ATTR_PROJECT_PATH := $(TOP)/device/qcom/sepolicy/generic/public/attribute
+# PixelOS-CLO 的 QSSI sepolicy 没有 generic/public/attribute；按存在性加入
+ifneq ($(wildcard $(QSSI_SEPOLICY_PATH)/generic/public/attribute),)
+SYS_ATTR_PROJECT_PATH := $(TOP)/$(QSSI_SEPOLICY_PATH)/generic/public/attribute
 SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS:= \
     $(SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS) \
     $(QSSI_SEPOLICY_PATH)/generic/public \
     $(QSSI_SEPOLICY_PATH)/generic/public/attribute
+else
+SYS_ATTR_PROJECT_PATH :=
+SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS:= \
+    $(SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS) \
+    $(QSSI_SEPOLICY_PATH)/generic/public
+endif
 
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS:= \
     $(SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS) \
